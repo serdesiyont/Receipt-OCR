@@ -7,10 +7,15 @@ import { createWriteStream } from 'fs';
 import { mkdir } from 'fs/promises';
 import { join } from 'path';
 import * as sharp from 'sharp';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class OcrService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @InjectQueue('ocr') private ocrQueue: Queue,
+  ) {}
 
   async create(createOcrInput: CreateOcrInput) {
     const image = await createOcrInput.image;
@@ -38,9 +43,11 @@ export class OcrService {
       stream.on('error', reject);
     });
 
-    const imageMetadata = await ((sharp as any)(imageBuffer)).metadata();
-    if (imageMetadata.width < 480) {
-      throw new BadRequestException('Image width must be at least 480px.');
+    const imageMetadata = await (sharp as any)(imageBuffer).metadata();
+    if (imageMetadata.width < 480 || imageMetadata.height < 480) {
+      throw new BadRequestException(
+        'Image width and height must be at least 480px.',
+      );
     }
 
     // Save the file
@@ -51,31 +58,23 @@ export class OcrService {
       writeStream.end(imageBuffer);
     });
 
-    // Mock data extraction (OCR simulation)
-    const mockData = {
-      storeName: 'Mock Store',
-      purchaseDate: new Date(),
-      totalAmount: 100.5,
-      items: [
-        { name: 'Item 1', quantity: 2 },
-        { name: 'Item 2', quantity: 1 },
-      ],
-    };
-
     // Save to PostgreSQL via Prisma
     const receipt = await this.prisma.receipt.create({
       data: {
-        storeName: mockData.storeName,
-        purchaseDate: mockData.purchaseDate,
-        totalAmount: mockData.totalAmount,
+        storeName: 'Processing...',
+        purchaseDate: new Date(),
+        totalAmount: 0,
         imageUrl: filePath, // Use the local file path
-        items: {
-          create: mockData.items,
-        },
+        status: 'PENDING',
       },
       include: {
         items: true,
       },
+    });
+
+    await this.ocrQueue.add('process_receipt', {
+      receiptId: receipt.id,
+      filePath,
     });
 
     return receipt;

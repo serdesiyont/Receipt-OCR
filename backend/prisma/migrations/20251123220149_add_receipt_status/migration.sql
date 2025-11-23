@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Receipt" ADD COLUMN     "status" TEXT NOT NULL DEFAULT 'PENDING';

@@ -5,7 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { OcrModule } from './ocr/ocr.module';
 import { PrismaModule } from './prisma/prisma.module';
-
+import { QueueModule } from './queue/queue.module';
+import { BullModule } from '@nestjs/bullmq';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -15,8 +16,16 @@ import { PrismaModule } from './prisma/prisma.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+        password: process.env.REDIS_PASSWORD,
+      },
+    }),
     OcrModule,
     PrismaModule,
+    QueueModule,
   ],
 })
 export class AppModule {}

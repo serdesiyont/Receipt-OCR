@@ -22,6 +22,7 @@ model Receipt {
   items Item[]
   imageUrl String
   createdAt DateTime @default(now())
+  status       String    @default("PENDING")
 }
 
 model Item{

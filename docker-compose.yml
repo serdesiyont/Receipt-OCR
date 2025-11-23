@@ -15,6 +15,14 @@ services:
     volumes:
       # Persist data to prevent data loss on container stop/recreate
       - postgres_data:/var/lib/postgresql/data
+  cache:
+    image: redis:7.4-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - cache:/data
 
   # # 2. NestJS Backend Service
   # backend:
@@ -54,3 +62,5 @@ services:
 # Define named volume for data persistence
 volumes:
   postgres_data:
+  cache:
+    driver: local
