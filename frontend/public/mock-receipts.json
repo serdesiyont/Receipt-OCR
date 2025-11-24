@@ -1,0 +1,149 @@
+{
+  "receipts": [
+    {
+      "id": "1",
+      "storeName": "Whole Foods Market",
+      "purchaseDate": "2025-01-15T10:30:00Z",
+      "totalAmount": 125.5,
+      "imageUrl": "/placeholder.svg?height=200&width=200",
+      "status": "processed",
+      "items": [
+        {
+          "id": "1-1",
+          "name": "Organic Bananas",
+          "quantity": 2
+        },
+        {
+          "id": "1-2",
+          "name": "Almond Butter",
+          "quantity": 1
+        },
+        {
+          "id": "1-3",
+          "name": "Greek Yogurt",
+          "quantity": 3
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "storeName": "Target",
+      "purchaseDate": "2025-01-14T14:15:00Z",
+      "totalAmount": 87.99,
+      "imageUrl": "/placeholder.svg?height=200&width=200",
+      "status": "pending",
+      "items": [
+        {
+          "id": "2-1",
+          "name": "T-Shirt",
+          "quantity": 1
+        },
+        {
+          "id": "2-2",
+          "name": "Jeans",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "storeName": "Starbucks Coffee",
+      "purchaseDate": "2025-01-14T08:45:00Z",
+      "totalAmount": 12.45,
+      "imageUrl": "/placeholder.svg?height=200&width=200",
+      "status": "processed",
+      "items": [
+        {
+          "id": "3-1",
+          "name": "Cappuccino",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "storeName": "Best Buy",
+      "purchaseDate": "2025-01-13T16:20:00Z",
+      "totalAmount": 299.99,
+      "imageUrl": "/placeholder.svg?height=200&width=200",
+      "status": "failed",
+      "items": [
+        {
+          "id": "4-1",
+          "name": "USB-C Cable",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "storeName": "Trader Joe's",
+      "purchaseDate": "2025-01-13T11:30:00Z",
+      "totalAmount": 67.83,
+      "imageUrl": "/placeholder.svg?height=200&width=200",
+      "status": "processed",
+      "items": [
+        {
+          "id": "5-1",
+          "name": "Frozen Pizza",
+          "quantity": 2
+        },
+        {
+          "id": "5-2",
+          "name": "Pasta",
+          "quantity": 3
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "storeName": "CVS Pharmacy",
+      "purchaseDate": "2025-01-12T09:00:00Z",
+      "totalAmount": 45.32,
+      "imageUrl": "/placeholder.svg?height=200&width=200",
+      "status": "pending",
+      "items": [
+        {
+          "id": "6-1",
+          "name": "Vitamins",
+          "quantity": 1
+        },
+        {
+          "id": "6-2",
+          "name": "Toothpaste",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "storeName": "Nike Store",
+      "purchaseDate": "2025-01-11T13:45:00Z",
+      "totalAmount": 189.99,
+      "imageUrl": "/placeholder.svg?height=200&width=200",
+      "status": "processed",
+      "items": [
+        {
+          "id": "7-1",
+          "name": "Running Shoes",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "storeName": "Amazon Fresh",
+      "purchaseDate": "2025-01-10T15:30:00Z",
+      "totalAmount": 156.72,
+      "imageUrl": "/placeholder.svg?height=200&width=200",
+      "status": "processed",
+      "items": [
+        {
+          "id": "8-1",
+          "name": "Kitchen Mixer",
+          "quantity": 1
+        }
+      ]
+    }
+  ]
+}
