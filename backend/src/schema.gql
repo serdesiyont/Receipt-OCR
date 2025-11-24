@@ -11,10 +11,11 @@ type Item {
 type Ocr {
   id: String!
   storeName: String!
-  purchaseDate: DateTime!
+  purchaseDate: DateTime
   totalAmount: Float!
   imageUrl: String!
   items: [Item!]
+  status: String!
 }
 
 """
@@ -23,7 +24,8 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Query {
-  ocr(id: String!): Ocr!
+  receipts: [Ocr!]!
+  receipt(id: String!): Ocr!
 }
 
 type Mutation {

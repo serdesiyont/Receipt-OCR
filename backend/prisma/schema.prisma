@@ -17,7 +17,7 @@ datasource db {
 model Receipt {
   id String @id @default(uuid())
   storeName String
-  purchaseDate DateTime
+  purchaseDate DateTime? 
   totalAmount Float
   items Item[]
   imageUrl String

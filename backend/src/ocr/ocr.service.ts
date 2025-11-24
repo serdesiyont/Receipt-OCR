@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Receipt } from 'generated/prisma/client';
 import { createWriteStream } from 'fs';
 import { mkdir } from 'fs/promises';
-import { join } from 'path';
+import { basename, join } from 'path';
 import * as sharp from 'sharp';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
@@ -16,6 +16,23 @@ export class OcrService {
     private prisma: PrismaService,
     @InjectQueue('ocr') private ocrQueue: Queue,
   ) {}
+
+  private toPublicImageUrl(source: string): string {
+    if (!source) {
+      return '';
+    }
+
+    if (source.startsWith('/uploads/')) {
+      return source;
+    }
+
+    if (source.startsWith('http://') || source.startsWith('https://')) {
+      return source;
+    }
+
+    const filename = basename(source);
+    return `/uploads/${filename}`;
+  }
 
   async create(createOcrInput: CreateOcrInput) {
     const image = await createOcrInput.image;
@@ -32,6 +49,7 @@ export class OcrService {
     const uploadDir = join(process.cwd(), 'uploads');
     await mkdir(uploadDir, { recursive: true });
     const filePath = join(uploadDir, filename);
+    const publicUrl = this.toPublicImageUrl(filename);
 
     const stream = image.createReadStream();
 
@@ -58,13 +76,13 @@ export class OcrService {
       writeStream.end(imageBuffer);
     });
 
-    // Save to PostgreSQL via Prisma
+    //Save to PostgreSQL via Prisma
     const receipt = await this.prisma.receipt.create({
       data: {
         storeName: 'Processing...',
-        purchaseDate: new Date(),
+        purchaseDate: null,
         totalAmount: 0,
-        imageUrl: filePath, // Use the local file path
+        imageUrl: publicUrl,
         status: 'PENDING',
       },
       include: {
@@ -81,14 +99,30 @@ export class OcrService {
   }
 
   async findAll(): Promise<Receipt[]> {
-    return await this.prisma.receipt.findMany({ include: { items: true } });
+    const receipts = await this.prisma.receipt.findMany({
+      include: { items: true },
+    });
+
+    return receipts.map((receipt) => ({
+      ...receipt,
+      imageUrl: this.toPublicImageUrl(receipt.imageUrl),
+    }));
   }
 
   async findOne(id: string) {
-    return await this.prisma.receipt.findUnique({
+    const receipt = await this.prisma.receipt.findUnique({
       where: { id },
       include: { items: true },
     });
+
+    if (!receipt) {
+      return receipt;
+    }
+
+    return {
+      ...receipt,
+      imageUrl: this.toPublicImageUrl(receipt.imageUrl),
+    };
   }
 
   update(id: string, updateOcrInput: UpdateOcrInput) {

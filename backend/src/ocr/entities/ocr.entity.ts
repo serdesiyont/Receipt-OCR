@@ -1,5 +1,6 @@
 import { ObjectType, Field, Float } from '@nestjs/graphql';
 import { Item } from './item.entity';
+import { isNullableType } from 'graphql';
 
 @ObjectType()
 export class Ocr {
@@ -9,7 +10,7 @@ export class Ocr {
   @Field(() => String)
   storeName: string;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   purchaseDate: Date;
 
   @Field(() => Float)
@@ -20,4 +21,7 @@ export class Ocr {
 
   @Field(() => [Item], { nullable: true })
   items: Item[];
+
+  @Field(() => String)
+  status: string;
 }

@@ -13,12 +13,12 @@ export class OcrResolver {
     return this.ocrService.create(createOcrInput);
   }
 
-  @Query(() => [Ocr], { name: 'ocr' })
+  @Query(() => [Ocr], { name: 'receipts' })
   findAll() {
     return this.ocrService.findAll();
   }
 
-  @Query(() => Ocr, { name: 'ocr' })
+  @Query(() => Ocr, { name: 'receipt' })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.ocrService.findOne(id);
   }
