@@ -20,6 +20,7 @@ interface Receipt {
     id: string;
     name: string;
     quantity: number;
+    price: number;
   }>;
 }
 
@@ -36,6 +37,7 @@ const receiptsQuery = `
         id
         name
         quantity
+        price
       }
     }
   }
@@ -82,7 +84,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchReceipts();
-    const interval = setInterval(fetchReceipts, 5000); // Poll for updates
+    const interval = setInterval(fetchReceipts, 15000); // Poll for updates
     return () => clearInterval(interval);
   }, [fetchReceipts]);
 

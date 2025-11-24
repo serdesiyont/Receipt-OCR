@@ -6,6 +6,7 @@ type Item {
   id: String!
   name: String!
   quantity: Int
+  price: Float
 }
 
 type Ocr {
