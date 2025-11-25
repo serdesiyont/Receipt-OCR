@@ -1,3 +1,4 @@
+
 # Receipt OCR
 
 This is a full-stack application that allows users to upload images of receipts, performs Optical Character Recognition (OCR) to extract the text, and uses a generative AI to parse the text into structured data.
@@ -36,49 +37,43 @@ This is a full-stack application that allows users to upload images of receipts,
 1.  **Clone the repository:**
 
     ```bash
-    git clone <repository-url>
-    cd <repository-folder>
+    git clone https://github.com/serdesiyont/Receipt-OCR.git
+    cd Receipt-OCR
     ```
 
-2.  **Create environment files:**
+2.  **Set up environment variables:**
 
-    Create a `.env` file in the root directory and a `.env` file in the `backend` directory.
+    Rename the `.env.example` file in the root of the project to `.env`.
 
-    **Root `.env`:**
+    ```bash
+    mv .env.example .env
+    ```
+
+    Open the `.env` file and add your Google Gemini API key:
 
     ```env
-    POSTGRES_USER=myuser
-    POSTGRES_PASSWORD=mypassword
-    POSTGRES_DB=mydb
-    REDIS_PASSWORD=myredispassword
+    # ... other variables
+    GEMINI_API_KEY=your_google_api_key
     ```
-
-    **`backend/.env`:**
-
-    ```env
-    GOOGLE_API_KEY=your_google_api_key
-    ```
-
-    Replace `your_google_api_key` with your actual Google Gemini API key.
 
 3.  **Build and run with Docker Compose:**
 
     ```bash
-    docker-compose up --build
+    docker-compose up --build -d
     ```
 
-    This will start the backend, frontend, database, and cache services.
+    This will start all the services.
 
-    - Frontend will be available at `http://localhost:3000`
-    - Backend GraphQL Playground will be at `http://localhost:3333/graphql`
-    - Bull Board (for queue monitoring) will be at `http://localhost:5555/admin/queues`
+    -   **Frontend:** `http://localhost:3000`
+    -   **Backend GraphQL Playground:** `http://localhost:3333/graphql`
+
 
 ## How to Extend the App
 
 ### Add User Accounts
 
 1.  **Update Prisma Schema:** Add a `User` model to `backend/prisma/schema.prisma` with fields like `email`, `password` (hashed), etc.
-2.  **Authentication Service:** Create a new module in the backend for authentication (e.g., `auth.module.ts`). Implement services for user registration, login, and password management. Use a library like `bcrypt` for password hashing and `jsonwebtoken` for session management.
+2.  **Authentication Service:** Create a new module in the backend for authentication. For a robust and secure implementation, consider using a library like [`better-auth`](https://www.better-auth.com/). It provides a complete solution for session management and is framework-agnostic, making it a great fit for the NestJS and Next.js stack. You'll implement services for user registration, login, and session handling.
 3.  **Protect GraphQL Resolvers:** Use NestJS Guards to protect resolvers that should only be accessible to authenticated users.
 4.  **Frontend Integration:** Create login and registration pages in the frontend. Manage user sessions and tokens (e.g., using React Context or a state management library).
 
