@@ -6,7 +6,7 @@ import { UploadModal } from "@/components/upload-modal";
 import { FilterBar } from "@/components/filter-bar";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
-import { graphqlFetch, graphqlUpload } from "@/lib/graphql";
+import { graphqlFetch, graphqlUpload, graphqlDelete } from "@/lib/graphql";
 import { useToast } from "@/hooks/use-toast";
 
 interface Receipt {
@@ -143,6 +143,25 @@ export default function Home() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      await graphqlDelete(id);
+      setReceipts((prev) => prev.filter((r) => r.id !== id));
+      setSelectedReceipt(null);
+      toast({
+        title: "Receipt deleted",
+        description: "The receipt has been successfully deleted.",
+      });
+    } catch (error) {
+      console.error("Error deleting receipt:", error);
+      toast({
+        title: "Delete failed",
+        description: "Could not delete receipt. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const uniqueStores = Array.from(
     new Set(receipts.map((r) => r.storeName))
   ).sort();
@@ -227,6 +246,7 @@ export default function Home() {
         <ReceiptDetail
           receipt={selectedReceipt}
           onClose={() => setSelectedReceipt(null)}
+          onDelete={handleDelete}
         />
       )}
 

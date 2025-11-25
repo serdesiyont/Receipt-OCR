@@ -67,7 +67,7 @@ export const graphqlUpload = async (file: File) => {
       method: "POST",
       body: formData,
       headers: {
-        "apollo-require-preflight": true,
+        "apollo-require-preflight": "true",
       },
     }
   );
@@ -89,4 +89,16 @@ export const graphqlUpload = async (file: File) => {
   }
 
   return result.data.createOcr;
+};
+
+export const graphqlDelete = async (id: string) => {
+  const query = `
+    mutation RemoveOcr($id: String!) {
+      removeOcr(id: $id) {
+        id
+      }
+    }
+  `;
+  const variables = { id };
+  await graphqlFetch(query, variables);
 };

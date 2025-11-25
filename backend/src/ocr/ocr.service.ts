@@ -4,7 +4,7 @@ import { UpdateOcrInput } from './dto/update-ocr.input';
 import { PrismaService } from '../prisma/prisma.service';
 import { Receipt } from 'generated/prisma/client';
 import { createWriteStream } from 'fs';
-import { mkdir } from 'fs/promises';
+import { mkdir, unlink } from 'fs/promises';
 import { basename, join } from 'path';
 import * as sharp from 'sharp';
 import { InjectQueue } from '@nestjs/bullmq';
@@ -127,5 +127,32 @@ export class OcrService {
 
   update(id: string, updateOcrInput: UpdateOcrInput) {
     return `This action updates a #${id} ocr with ${JSON.stringify(updateOcrInput)}`;
+  }
+
+  async remove(id: string) {
+    const receipt = await this.prisma.receipt.findUnique({
+      where: { id },
+    });
+
+    if (!receipt) {
+      throw new BadRequestException(`Receipt with ID ${id} not found.`);
+    }
+
+    // Delete from DB
+    await this.prisma.receipt.delete({ where: { id } });
+
+    // Delete image file
+    if (receipt.imageUrl) {
+      const filename = basename(receipt.imageUrl);
+      const filePath = join(process.cwd(), 'uploads', filename);
+      try {
+        await unlink(filePath);
+      } catch (error) {
+        // Log error if file deletion fails but don't block response
+        console.error(`Failed to delete image file: ${filePath}`, error);
+      }
+    }
+
+    return receipt;
   }
 }

@@ -22,9 +22,10 @@ interface Receipt {
 interface ReceiptDetailProps {
   receipt: Receipt
   onClose: () => void
+  onDelete: (id: string) => void
 }
 
-export function ReceiptDetail({ receipt, onClose }: ReceiptDetailProps) {
+export function ReceiptDetail({ receipt, onClose, onDelete }: ReceiptDetailProps) {
   // Close modal on Escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -121,9 +122,15 @@ export function ReceiptDetail({ receipt, onClose }: ReceiptDetailProps) {
         </div>
 
         {/* Footer */}
-        <div className="bg-gray-50 border-t border-gray-200 px-6 py-4">
-          <Button onClick={onClose} className="w-full bg-green-600 hover:bg-green-700">
+        <div className="bg-gray-50 border-t border-gray-200 px-6 py-4 flex justify-end gap-4">
+          <Button onClick={onClose} variant="outline">
             Close
+          </Button>
+          <Button
+            onClick={() => onDelete(receipt.id)}
+            variant="destructive"
+          >
+            Delete
           </Button>
         </div>
       </div>

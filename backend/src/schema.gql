@@ -32,6 +32,7 @@ type Query {
 type Mutation {
   createOcr(createOcrInput: CreateOcrInput!): Ocr!
   updateOcr(updateOcrInput: UpdateOcrInput!): Ocr!
+  removeOcr(id: String!): Ocr!
 }
 
 input CreateOcrInput {

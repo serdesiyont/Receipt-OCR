@@ -5,9 +5,12 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider      = "prisma-client"
+  output        = "../generated/prisma"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
 }
+
+
 
 datasource db {
   provider = "postgresql"
@@ -31,7 +34,7 @@ model Item {
   quantity  Int?     @default(1)
   price     Float?
   receiptID String
-  receipt   Receipt  @relation(fields: [receiptID], references: [id])
+  receipt   Receipt  @relation(fields: [receiptID], references: [id], onDelete: Cascade)
 }
 
 

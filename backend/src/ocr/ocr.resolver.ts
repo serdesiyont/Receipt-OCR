@@ -28,8 +28,8 @@ export class OcrResolver {
     return this.ocrService.update(updateOcrInput.id, updateOcrInput);
   }
 
-  // @Mutation(() => Ocr)
-  // removeOcr(@Args('id', { type: () => String }) id: string) {
-  //   return this.ocrService.remove(id); // This also needs update in service if I change it there
-  // }
+  @Mutation(() => Ocr)
+  removeOcr(@Args('id', { type: () => String }) id: string) {
+    return this.ocrService.remove(id);
+  }
 }
